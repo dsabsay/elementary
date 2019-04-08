@@ -293,6 +293,7 @@ const p = (...args) => compose(makeHTMLElement('p'), ...args);
 const b = (...args) => compose(makeHTMLElement('b'), ...args);
 const a = (...args) => compose(makeHTMLElement('a'), ...args);
 const button = (...args) => compose(makeHTMLElement('button'), ...args);
+const input = (...args) => compose(makeHTMLElement('input'), ...args);
 const img = (...args) => compose(makeHTMLElement('img'), ...args);
 const br = () => compose(makeHTMLElement('br'));
 const table = (...args) => compose(makeHTMLElement('table'), ...args);
@@ -323,6 +324,7 @@ export {
   b,
   a,
   button,
+  input,
   img,
   br,
   svg,
