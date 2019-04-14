@@ -138,6 +138,7 @@ const Button = (props) => Extend(Elementary, {
         // transitionTimingFunction: 'ease',
         backgroundColor: this.props.color,
         cursor: 'pointer',
+        ...props.style
       }}
     );
   }
@@ -194,9 +195,24 @@ const FlexContainer = ElementaryFunc((props) => (
 const FlexItem = ElementaryFunc((props) => (
   div({
     style: {
-      margin: props.theme.spacing,
-      padding: props.theme.spacing,
-      flex: props && props.flex ? props.flex : '0 1 auto',
+      // margin: props.theme.spacing,
+      // padding: props.theme.spacing,
+      flex: props && props.flex ? props.flex : '0 1 0',
+      ...(props && props.style),
+    },
+  })
+));
+
+const FlexContainerItem = ElementaryFunc((props) => (
+  div({
+    style: {
+      // margin: props.theme.spacing,
+      // padding: props.theme.spacing,
+      display: 'flex',
+      flexDirection: props.flexDirection || 'row',
+      alignItems: props.alignItems || 'flex-start',
+      justifyContent: props.justifyContent || 'flex-start',
+      flex: props && props.flex ? props.flex : '0 1 0',
       ...(props && props.style),
     },
   })
@@ -205,6 +221,7 @@ const FlexItem = ElementaryFunc((props) => (
 export {
   FlexContainer,
   FlexItem,
+  FlexContainerItem,
   Heading,
   Button,
   Card,
