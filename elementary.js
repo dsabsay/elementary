@@ -284,6 +284,65 @@ function Route(route, ...components) {
   return [...components];
 }
 
+/* Creates a style sheet that is scoped to all descendants of the element
+ * with the given `id`.
+ */
+function StyleSheet(id, sheet) {
+  let styleSheetId = `${id}-style-sheet`;
+
+  /* Remove existing style sheet */
+  let existing = document.getElementById(styleSheetId);
+  if (existing) {
+    document.head.removeChild(existing);
+  }
+
+  let style = document.createElement('style');
+  style.setAttribute('id', styleSheetId);
+  document.head.appendChild(style);  // Need to append to DOM to access style.sheet
+
+  /* rules - mapping of selector -> property_name -> property_value
+   */
+  function getDeclarations(decls) {
+    let declString = '';
+    for (let name of Object.keys(decls)) {
+      let kebab = name.replace(/([a-z])([A-Z])/, '$1-$2').toLowerCase();
+      declString += `${kebab}: ${decls[name]};`;
+    }
+    return declString;
+  }
+
+  function getRule(selector, decls) {
+    let rule = `#${id} ${selector} {`;
+    rule += getDeclarations(decls);
+    rule += `}`;
+
+    return rule;
+  }
+
+  function getAtRule(at, rules) {
+    let atRule = `${at} {`;
+    for (let selector of Object.keys(rules)) {
+      atRule += getRule(selector, rules[selector]);
+    }
+
+    atRule += `}`;
+    return atRule;
+  }
+
+  for (let atOrSelector of Object.keys(sheet)) {
+    console.log(`processing: ${atOrSelector}`);
+    if (atOrSelector.startsWith('@')) {
+      style.sheet.insertRule(getAtRule(atOrSelector, sheet[atOrSelector]));
+    } else {
+      style.sheet.insertRule(getRule(atOrSelector, sheet[atOrSelector]));
+    }
+  }
+
+  console.log(style.sheet);
+
+  return compose((props) => style);
+}
+
 // HTML Elements
 const div = (...args) => compose(makeHTMLElement('div'), ...args);
 const span = (...args) => compose(makeHTMLElement('span'), ...args);
@@ -313,6 +372,7 @@ export {
   ElementaryFunc,
   Extend,
   Route,
+  StyleSheet,
   compose,
   makeHTMLElement,
   mergeThemes,

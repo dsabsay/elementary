@@ -192,8 +192,17 @@ const FlexContainer = ElementaryFunc((props) => (
   })
 ));
 
-const FlexItem = ElementaryFunc((props) => (
-  div({
+const FlexItem = ElementaryFunc((props) => {
+  if (props && props.noInline) {
+    return div({
+      class: props.class || null,
+      style: {
+        ...(props && props.style),
+      },
+    });
+  }
+
+  return div({
     style: {
       // margin: props.theme.spacing,
       // padding: props.theme.spacing,
@@ -201,7 +210,7 @@ const FlexItem = ElementaryFunc((props) => (
       ...(props && props.style),
     },
   })
-));
+});
 
 const FlexContainerItem = ElementaryFunc((props) => (
   div({
